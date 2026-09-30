@@ -1,6 +1,7 @@
 // client/index.ts
 import { updatePlayerState } from '../shared/game-logic.js';
-import { ObjectPool } from '../shared/ObjectPool.js'; // Імпортуємо ваш пул об'єктів
+// @ts-ignore
+import { ObjectPool } from '../shared/ObjectPool.js';
 
 export interface ClientPlayerState {
     x: number;
@@ -26,7 +27,7 @@ const pendingInputs: ClientInput[] = [];
 // --- ДОДАЄМО ПУЛ ОБ'ЄКТІВ ДЛЯ КУЛЬ / ЧАСТИНОК ---
 const bulletPool = new ObjectPool(
     () => ({ x: 0, y: 0, vx: 0, vy: 0, active: false }),
-    (bullet, x, y, vx, vy) => {
+    (bullet: any, x: number, y: number, vx: number, vy: number) => {
         bullet.x = x;
         bullet.y = y;
         bullet.vx = vx;
@@ -58,7 +59,7 @@ window.addEventListener('mousedown', () => {
     const vx = Math.cos(myState.angle) * speed;
     const vy = Math.sin(myState.angle) * speed;
 
-    // БЕРЕМО кулю з пулу замість створення нового об'єкта через 'new'
+    // Беремо кулю з пулу замість створення нового об'єкта через 'new'
     const bullet = bulletPool.get(myState.x, myState.y, vx, vy);
     activeBullets.push(bullet);
 });
@@ -95,7 +96,7 @@ export function clientTick(ws: WebSocket | null | undefined) {
 }
 
 function serializeInputBinary(input: ClientInput): ArrayBuffer {
-    const buffer = new ArrayBuffer(6); 
+    const buffer = new ArrayBuffer(6);
     const view = new DataView(buffer);
     view.setUint32(0, input.seq, true);
 

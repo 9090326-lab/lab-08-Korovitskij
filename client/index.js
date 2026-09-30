@@ -1,6 +1,7 @@
 // client/index.ts
 import { updatePlayerState } from '../shared/game-logic.js';
-import { ObjectPool } from '../shared/ObjectPool.js'; // Імпортуємо ваш пул об'єктів
+// @ts-ignore
+import { ObjectPool } from '../shared/ObjectPool.js';
 let localSeq = 0;
 let myPlayerId = 1;
 let myState = { x: 400, y: 300, vx: 0, vy: 0, angle: 0 };
@@ -31,7 +32,7 @@ window.addEventListener('mousedown', () => {
     const speed = 15;
     const vx = Math.cos(myState.angle) * speed;
     const vy = Math.sin(myState.angle) * speed;
-    // БЕРЕМО кулю з пулу замість створення нового об'єкта через 'new'
+    // Беремо кулю з пулу замість створення нового об'єкта через 'new'
     const bullet = bulletPool.get(myState.x, myState.y, vx, vy);
     activeBullets.push(bullet);
 });
